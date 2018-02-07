@@ -1,28 +1,26 @@
-//Оптимальне бінарне дерево пошуку (динамічне програмування)
+// РћРїС‚РёРјР°Р»СЊРЅРµ Р±С–РЅР°СЂРЅРµ РґРµСЂРµРІРѕ РїРѕС€СѓРєСѓ (РґРёРЅР°РјС–С‡РЅРµ РїСЂРѕРіСЂР°РјСѓРІР°РЅРЅСЏ)
 #include <iostream>
 using namespace std;
-#define MAX 300
+#define MAX 100
 #define INF 0x3F3F3F3F
 int m[MAX], sum[MAX];
 int t[MAX][MAX];
-//Входные частоты элементов храним в массиве m, в массиве sum будут
-//храниться частичные суммы частот: sum[i]. Значения Ti,j будут xраниться в массиве t.
-//Частичная сумма  возвращается функцией weight(i, j)
+
 int weight(int i, int j)
 {
 	if (i > j) return 0;
 	return sum[j] - sum[i - 1];
 }
-//Функция go(i, j) возвращает значение Ti, j.
-int go(int i, int j)
+
+int way(int i, int j)
 {
-	int k, temp;
+	int l, temp;
 	if (i > j) return 0;
 	if (t[i][j] == INF)
 	{
-		for (k = i; k <= j; k++)
+		for (l = i; l <= j; l++)
 		{
-			temp = go(i, k - 1) + go(k + 1, j) + weight(i, k - 1) + weight(k + 1, j);
+			temp = way(i, l - 1) + way(l + 1, j) + weight(i, l - 1) + weight(l + 1, j);
 			if (temp < t[i][j]) t[i][j] = temp;
 		}
 	}
@@ -35,11 +33,11 @@ int main() {
 		memset(t, 0x3F, sizeof(t));
 		for (i = 1; i <= n; i++)
 			cin >> m[i], t[i][i] = 0;
-		//Вычисляем частичные суммы массива m.
+		
 		for (sum[0] = 0, i = 1; i <= n; i++)
 			sum[i] = sum[i - 1] + m[i];
-		//Вычисляем значение T1, n вызовом go(1, n) и печатаем его.
-		go(1, n);
+		
+		way(1, n);
 		cout << t[1][n] << endl;
 	}
 	system("pause");
